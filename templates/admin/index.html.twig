@@ -4,15 +4,14 @@
 
 <h3> Espace Administration</h3>
 <br>
-<br>
-<br>
+
   <a href="{{ path("admin.module.index") }} "class="btn btn-primary" role="button">Gérer les articles</a>
   <a href="{{ path("admin.categorie.index") }}"class="btn btn-primary" role="button">Gérer les categories</a>
   <a href="{{ path("admin.page.index") }}"class="btn btn-primary" role="button">Gérer les pages</a>
   {#<a href="#"class="btn btn-primary" role="button">Gérer les categories</a>#}
+
 <br>
-<br>
-<br>
+
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
             {{ message }}
