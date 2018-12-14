@@ -1,6 +1,4 @@
-/var/log/*
-**/var.log./dev.log
-/var/cache/*
+
 
 ###> symfony/framework-bundle ###
 ###< symfony/framework-bundle ###
