@@ -1,0 +1,42 @@
+{% extends '/admin/index.html.twig' %}
+
+{% block administration %}
+
+
+<br>
+<br>
+<a href="{{ path('admin.module.nouveau') }}" class="btn btn-success">Ajouter un module</a>
+<br>
+<br>
+    <div  id="formulaires" class="row">
+        <div class="col-8">
+            {% block formulaire_module %}
+            {% endblock %}
+        </div>
+        <div class="col-4">
+            {% block formulaire_categorie %}
+            {% endblock %}
+        </div>
+    </div>
+<table class="table table striped">
+    <thead>
+    <tr> Titre</tr>
+    <tr> Actions</tr>
+    </thead>
+    <tbody>
+    {% for module in modules %}
+        <tr>
+            <td>  {{ module.titre }}</td>
+
+            <td>
+                <a href="{{ path('admin.module.editer',{id:module.id}) }}" class="btn btn-primary">Modifier</a>
+                <a href="{{ path('admin.module.publier',{id:module.id}) }}" class="btn {%  if module.etatpublication ==1 %} btn-danger {%  else%} btn-success {% endif %}"> {% if module.etatpublication == 1 %} dépublier {% else %}  publier {% endif %}  </a>
+                {#<a href="#" class="btn btn-primary">Modifier</a>#}
+                {#<a href="#" class="btn btn-danger">Supprimer</a>#}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

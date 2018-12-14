@@ -1,0 +1,8 @@
+#easy_admin:
+#  site_name: 'CRMA Normandie'
+#  entities:
+#        # List the entity class name you want to manage
+#    Module:
+#      class: App\Entity\Module
+#    Categorie:
+#      class: App\Entity\Categorie

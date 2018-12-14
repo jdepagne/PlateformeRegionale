@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h2>{{ page.titrePage }}</h2>
+<div class="row  flex justify-content-around">
+        <div id="liste_article" class="col-3">
+            {%  for i in 1..10 %}
+
+                {#- <a href="{{ path('article_voir', {"i": i}) }}"> {{categorie}} n° {{i}}</a>#}
+                Article n° {{ i }} <br>
+            {% endfor %}
+        </div>
+    <div class="col-8">
+        <h1> Article </h1>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id nibh at augue bibendum tristique. Nam varius aliquet nunc, sed mollis dui. In accumsan tellus convallis, posuere mi et, faucibus odio. Donec sed tellus in risus ultricies pulvinar. Etiam aliquam mollis hendrerit. Suspendisse et imperdiet nunc. Nam suscipit, neque sed varius hendrerit, arcu risus imperdiet neque, et consectetur leo justo nec orci. Nam fringilla laoreet hendrerit. Duis imperdiet sed velit in auctor. Quisque placerat tellus nunc, sed dictum elit auctor sed. Sed blandit dictum dui venenatis tristique. Etiam fermentum sodales magna. Sed feugiat felis sit amet magna porta, et accumsan urna feugiat.
+
+            Quisque tincidunt eros sit amet congue pretium. Duis purus dui, tincidunt viverra nibh sed, dapibus suscipit velit. Phasellus dignissim nulla interdum, maximus purus et, imperdiet massa. Suspendisse potenti. Nulla leo neque, aliquam vitae quam nec, egestas consequat mauris.
+
+        </p>
+
+
+        <div class="btn-grp">
+            <a class="btn btn-secondary" href="{{ path('homepage') }}"> retour a l'index</a>
+            {#{% if number > 1 %}</button>#}
+
+            <a class="btn btn-secondary" href="#"> article precedent </a>
+            {#{% endif %}#}
+            </button>
+            <a class="btn btn-secondary" href="#"> article suivant </a>
+
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

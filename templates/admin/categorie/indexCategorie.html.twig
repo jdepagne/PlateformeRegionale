@@ -1,0 +1,29 @@
+{% extends 'admin/index.html.twig' %}
+{% block administration %}
+<br>
+     <a href="{{ path('admin.categorie.nouveau') }}" class="btn btn-success">Ajouter une catégorie</a>
+    <br>
+    {% block formulaire_categorie %}
+    {% endblock %}
+    <br>
+    <table class="table table striped">
+    <thead>
+    <tr> Titre</tr>
+    <tr> Actions</tr>
+    </thead>
+    <tbody>
+    {% for categorie in categories %}
+        <tr>
+            <td>  {{ categorie.nom }}</td>
+
+            <td>
+                <a href="{{ path('admin.categorie.editer',{id:categorie.id}) }}" class="btn btn-primary">Modifier</a>
+                {#<a href="{{ path('admin.article.publier',{id:article.id}) }}" class="btn {%  if article.etatpublication ==1 %} btn-danger {%  else%} btn-success {% endif %}"> {% if article.etatpublication == 1 %} dépublier {% else %}  publier {% endif %}  </a>#}
+                {#<a href="#" class="btn btn-primary">Modifier</a>#}
+                <a href="#" class="btn btn-danger">Supprimer</a>
+            </td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

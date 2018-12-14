@@ -1,0 +1,21 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block administration %}
+
+        <div class="container mt-4">
+            <h2> Modifier une page</h2>
+            {{ form_start(form) }}
+            {#<div class="row">#}
+            {#<div class="col-md-9">{{ form_row(form.titre) }}</div>#}
+            {#<div class="col-md-3">{{ form_row(form.etatPublication) }}</div>#}
+            {#<div class="col-md-9">  {{ form_row(form.categories) }}</div>#}
+            {#<a class="btn btn-success col-md-4" style="margin:15px;" href="{{ path('admin.categorie.nouveau') }}">Créer une categorie</a>#}
+
+            {#</div>#}
+            {{ form_rest(form) }}
+            <button class="btn btn-primary">Enregistrer</button>
+            {{ form_end(form) }}
+        </div>
+
+{% endblock %}
+

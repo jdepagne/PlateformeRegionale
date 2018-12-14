@@ -1,0 +1,18 @@
+{% extends 'admin/modules/indexModule.html.twig' %}
+{% block formulaire_module %}
+
+        <h2> Ajouter un article</h2>
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-9">{{ form_row(form.titre) }}</div>
+            <div class="col-md-3">{{ form_row(form.etatPublication) }}</div>
+            <div class="col-md-9">  {{ form_row(form.categories) }}</div>
+            <a class="btn btn-success col-md-4" style="margin:15px;" href="{{ path('admin.categorie.nouveau') }}">Créer une categorie</a>
+            {{ form_rest(form) }}
+        </div>
+
+        <button class="btn btn-primary">Enregistrer</button>
+
+        {{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block administration %}
+    <div class="container mt-4">
+        <h2> Ajouter une page</h2>
+
+        {{ form_start(form) }}
+
+            {{ form_row(form.page) }}
+
+        <a href="#" id="add_module" class="btn btn-primary">Ajouter un module</a>
+
+            {{ form_row(form.module) }}
+
+        <button class="btn btn-primary">Enregistrer</button>
+
+        {{ form_end(form) }}
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            var $containerP = $('div#page_module_page');
+            var $containerM =$('div#page_module_module');
+
+            var index = $containerM.find(':input').length;
+
+            addPage($containerP);
+            addModule($containerM);
+
+             function addPage($containerP){
+                 var templateP = $containerP.attr('data-prototype')
+                     .replace(/__name__label__/g, 'page')
+                     .replace(/__name__/g, index)
+                 ;
+                 // On crée un objet jquery qui contient ce template
+                 var $prototypeP = $(templateP);
+
+                 // On ajoute le prototype modifié à la fin de la balise <div>
+                 $containerP.append($prototypeP);
+
+             }
+
+            //La fonction qui ajoute un formulaire CategoryType
+            function addModule($containerM) {
+                // Dans le contenu de l'attribut « data-prototype », on remplace :
+                // - le texte "__name__label__" qu'il contient par le label du champ
+                // - le texte "__name__" qu'il contient par le numéro du champ
+                var templateM = $containerM.attr('data-prototype')
+                    .replace(/__name__label__/g, 'nouveau module')
+                    .replace(/__name__/g, index)
+                ;
+                // On crée un objet jquery qui contient ce template
+                var $prototypeM = $(templateM);
+
+                // On ajoute le prototype modifié à la fin de la balise <div>
+                $containerM.append($prototypeM);
+
+            }
+
+            //On ajoute un nouveau le formulaire au clic sue le bouton d'ajout.
+            $("#add_module").click(function () {
+              $('div#module').toggle(display);
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+
+
+
+        })
+
+    </script>
+
+
+
+
+
+{% endblock %}
+

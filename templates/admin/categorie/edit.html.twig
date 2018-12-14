@@ -1,0 +1,20 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block administration %}
+    <div class="container mt-4">
+        <h2> Modifier la categorie: {{ categorie.nom }}</h2>
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-9">{{ form_row(form.nom) }}</div>
+
+            <div class="col-md-9">{{ form_row(form.parent) }}</div>
+
+        </div>
+
+        <button class="btn btn-primary">Sauvegarder</button>
+        <a class="btn  btn-danger" href="{{ path('admin.categorie.index') }}">quitter</a>
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}
+

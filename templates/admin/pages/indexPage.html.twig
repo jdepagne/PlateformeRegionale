@@ -1,0 +1,39 @@
+{% extends 'admin/index.html.twig' %}
+{% block administration %}
+<br>
+ <a href="{{ path('admin.page.nouveau')}} " class="btn btn-success">Ajouter une page</a>
+<br>
+    <div class="row">
+        <div class="col-8">
+            {% block  formulaire_module %}
+            {% endblock %}
+        </div>
+        <div class="col-4">
+            {% block  formulaire_categorie%}
+            {% endblock %}
+        </div>
+    </div>
+<br>
+<br>
+    <table class="table table striped">
+    <thead>
+    <tr> Titre</tr>
+    <tr> Actions</tr>
+    </thead>
+    <tbody>
+    {% for page in listePages %}
+        <tr>
+            <td>  {{ page.titrePage }}</td>
+
+            <td>
+                <a href="{{ path('admin.page.editer',{id:page.id}) }}" class="btn btn-primary">Modifier</a>
+                 <a href="{{ path('admin.page.publier',{id:page.id}) }}" class="btn {% if page.etatPublicationPage ==1 %} btn-danger {% else %}btn-success {% endif %}"> {% if page.etatPublicationPage ==1 %} dépublier {% else %} publier {% endif %}</a>
+                {#<a href="#" class="btn btn-primary">Modifier</a>#}
+                {#<a href="#" class="btn btn-danger">publier</a>#}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock %}

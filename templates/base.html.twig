@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        {% endblock %}
+    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+        <a class="navbar-brand" href="{{ path('homepage') }}">Site Régional</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {#<li class="nav-item active">#}
+                    {#<a class="nav-link  {% if current_menu is defined and  current_menu =='actualites' %}bg-danger{% endif %}" href="{{ path('page',{'categorie':'actualites'}) }}">Actualités</a>#}
+                {#</li>#}
+                {#<li class="nav-item active">#}
+                    {#<a class="nav-link  {% if current_menu is defined and current_menu =='communication' %}bg-danger{% endif %}" href="{{ path('page',{'categorie':'communication'}) }}">Communication</a>#}
+                {#</li><li class="nav-item active">#}
+                    {#<a class="nav-link {% if current_menu is defined and current_menu =='formation' %}bg-danger{% endif %}" href="{{ path('page',{'categorie':'formation'}) }}">Formation</a>#}
+                {#</li>#}
+                {% for page in pages %}
+                    <li class="navbar-nav mr-auto">
+                        <a class="nav-link"  href="{{ path('page.show',{'id':page.id}) }}" >{{ page.titrePage }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </nav>
+    <div class="jumbotron text-center"><h1>CRMA Normandie</h1>
+        <p> Bienvenue sur le site de la Chambre Régionale de Métiers et de l'Artisanat Normandie</p>
+    </div>
+    <div class="m-3">
+        {% block body %}
+
+
+        {% endblock %}
+    </div>
+        {% block javascripts %}
+        {% endblock %}
+
+    <script src="//cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>
