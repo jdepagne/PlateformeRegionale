@@ -28,14 +28,13 @@ class ModuleType extends AbstractType
                 'expanded'=>true,
                 'label'=>'Activer la publication'
             ])
-            ->add('categories', EntityType::class, array(
-                'class'=> Categorie::class,
-                'multiple'=>true,
-                'choice_label'=> 'nom',
-                'choice_value'=>'id',
-                'required'=> false
-            ))
-            ->add('contenuCourt', CKEditorType::class)
+//            ->add('categories', EntityType::class,array(
+//                'class'=> Categorie::class,
+//                'multiple'=>true,
+//                'choice_label'=> 'nom',
+//                'choice_value'=>'id',
+//                'required'=> false
+//            ))
             ->add('contenu', CKEditorType::class)
         ;
     }

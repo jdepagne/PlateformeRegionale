@@ -1,18 +1,56 @@
 {% extends 'admin/modules/indexModule.html.twig' %}
 {% block formulaire_module %}
 
-        <h2> Ajouter un article</h2>
-        {{ form_start(form) }}
-        <div class="row">
-            <div class="col-md-9">{{ form_row(form.titre) }}</div>
-            <div class="col-md-3">{{ form_row(form.etatPublication) }}</div>
-            <div class="col-md-9">  {{ form_row(form.categories) }}</div>
-            <a class="btn btn-success col-md-4" style="margin:15px;" href="{{ path('admin.categorie.nouveau') }}">Créer une categorie</a>
-            {{ form_rest(form) }}
+    <h2> Ajouter un article</h2>
+
+    {{ form_start(form) }}
+    <div class=" row col-12">
+        <div class="row col-8">
+            <div class="col-md-9">{{ form_row(form.module.titre) }}</div>
+            <div class="col-md-3">{{ form_row(form.module.etatPublication) }}</div>
+            <div class="col-md-12">{{ form_row(form.module.contenu) }}</div>
+            {#<div class="col-md-9">  {{ form_row(form.categories) }}</div>#}
+
         </div>
+        <div class="row col-4 flex-column"  >
+            <div id="category">
+                <btn id="add_category" class="btn btn-success " style="margin:15px;" >Créer une categorie</btn>
+                <div id="formulaire_categorie_ajout" class="col-10"  >
+                    {{ form_row(form.categorie_create) }}
+                </div>
+                <div id="formulaire_categorie_exist" class="col-10">
+                    {{ form_row(form.categorie) }}
+                </div>
+            </div>
+            <div id="page">
+                <h4> Ajouter a une page</h4>
+                <div id="formulaire_page_ajout" class="col-10"></div>
+                <div id="formulaire_page_exist" class="col-10"></div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <button class="col-3 btn btn-primary">Enregistrer</button>
+    <br>
+    <br>
+    {{ form_end(form) }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
 
-        <button class="btn btn-primary">Enregistrer</button>
+        $(document).ready(function() {
+            $("#formulaire_categorie_ajout").hide();
 
-        {{ form_end(form) }}
+            //On ajoute un nouveau le formulaire au clic sue le bouton d'ajout.
+            $("#add_category").click(function () {
+                $('div#formulaire_categorie_ajout').toggle();
+                $('div#formulaire_categorie_exist').toggle();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+        })
+
+    </script>
 
 {% endblock %}

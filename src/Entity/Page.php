@@ -44,7 +44,8 @@ class Page
     private $dateModificationPage;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Categorie", mappedBy="pages")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Categorie", inversedBy="pages")
+     * @ORM\JoinTable(name="categorie_page")
      */
     private $categories;
 
@@ -52,6 +53,16 @@ class Page
      * @ORM\OneToMany(targetEntity="App\Entity\PageModule", mappedBy="page", orphanRemoval=true)
      */
     private $pageModules;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+
+    private $parent;
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="parent")
+     */
+    private $children;
 
     public function __construct()
     {
@@ -182,7 +193,35 @@ class Page
 
         return $this;
     }
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
 
+    /**
+     * @param mixed $parent
+     */
+    public function setParent($parent): void
+    {
+        $this->parent = $parent;
+    }
 
-    
+    /**
+     * @return mixed
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param mixed $children
+     */
+    public function setChildren($children): void
+    {
+        $this->children = $children;
+    }
 }

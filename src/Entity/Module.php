@@ -50,7 +50,7 @@ class Module
     private $dateModification;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Categorie", inversedBy="modules")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Categorie", inversedBy="modules", cascade={"persist"})
      * @ORM\JoinTable(name="module_categorie")
      */
     private $categories;

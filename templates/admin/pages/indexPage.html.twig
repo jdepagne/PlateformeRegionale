@@ -3,16 +3,9 @@
 <br>
  <a href="{{ path('admin.page.nouveau')}} " class="btn btn-success">Ajouter une page</a>
 <br>
-    <div class="row">
-        <div class="col-8">
-            {% block  formulaire_module %}
-            {% endblock %}
-        </div>
-        <div class="col-4">
-            {% block  formulaire_categorie%}
-            {% endblock %}
-        </div>
-    </div>
+    {% block  formulaire_page %}
+    {% endblock %}
+<br>
 <br>
     <table class="table table striped">
     <thead>

@@ -17,12 +17,13 @@ class PageModule
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="pageModules")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="pageModules",cascade={"persist"})
      */
     private $page;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Module", inversedBy="pageModules")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Module", inversedBy="pageModules", cascade={"persist"})
+     * @ORM\JoinColumn(name="module_id", nullable=true)
      */
     private $module;
 

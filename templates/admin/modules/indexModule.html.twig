@@ -1,23 +1,13 @@
 {% extends '/admin/index.html.twig' %}
 
 {% block administration %}
-
-
 <br>
-
 <a href="{{ path('admin.module.nouveau') }}" class="btn btn-success">Ajouter un module</a>
 <br>
-<br>
-    <div  id="formulaires" class="row">
-        <div class="col-8">
-            {% block formulaire_module %}
-            {% endblock %}
-        </div>
-        <div class="col-4">
-            {% block formulaire_categorie %}
-            {% endblock %}
-        </div>
-    </div>
+    {% block formulaire_module %}
+    {% endblock %}
+    <br>
+    <br>
 <table class="table table striped">
     <thead>
     <tr> Titre</tr>

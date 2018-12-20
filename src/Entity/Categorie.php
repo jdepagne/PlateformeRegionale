@@ -45,7 +45,7 @@ class Categorie
      */
     private $children;
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Page", inversedBy="categories")
+     * @ORM\ManyToMany(targetEntity="Page", mappedBy="categories")
      */
     private $pages;
 

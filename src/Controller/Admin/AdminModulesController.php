@@ -9,13 +9,17 @@
 namespace App\Controller\Admin;
 
 
+use App\Entity\Categorie;
 use App\Entity\Module;
 
+use App\Form\CategorieType;
 use App\Form\ModuleType;
+use App\Repository\CategorieRepository;
 use App\Repository\ModuleRepository;
 
 use App\Repository\PageRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,17 +63,73 @@ class AdminModulesController extends AbstractController
     }
 
     /**
+     *@Route("/admin/module/nouveau", name="admin.module.nouveau")
+     *@return Response
+     */
+    public function ajouter(Request $request, PageRepository $pageRepository) :Response
+    {
+        $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
+        $modules = $this->moduleRepository->findAll();
+
+        $form=$this->createFormBuilder()
+            ->add('module', ModuleType::class)
+            ->add('categorie_create', CategorieType::class, array(
+            'required'=>false
+            ))
+            ->add('categorie',EntityType::class, array(
+                'class'=>Categorie::class,
+                'multiple'=>false,
+                'choice_label'=>'nom',
+                'required'=>false,
+                'query_builder' => function(CategorieRepository $categorieRepository){
+                    return $categorieRepository->getfindAllQueryBuilder();
+                }
+
+            ))
+            ->getForm();
+        ;
+        $form->handleRequest($request);
+        if ($form ->isSubmitted() && $form->isValid())
+        {
+            $module= $form->get('module')->getData();
+            $categorieAjout = $form->get('categorie')->getData();
+            $categorieCreate = $form->get('categorie_create')->getData();
+
+            if($categorieCreate ==null && $categorieAjout !== null)
+            {
+                $module->addCategory($categorieAjout);
+
+            }else if ($categorieCreate !== null && $categorieAjout == null){
+                $module->addCategory($categorieCreate);
+            }
+            else{
+                dump('va falloir faire un choix');
+            }
+            dump($module);
+            $this->em->persist($module);
+            $this->em->flush();
+
+//            $this->em->persist($module);
+////            $this->em->flush();
+////            $this->addFlash('success','L\'article a été créé');
+////            return $this->redirectToRoute('admin.module.index');
+        };
+        return $this->render("admin/modules/nouveau.html.twig",[
+            'form'=> $form->createView(),
+            'pages'=>$pages,
+            'modules'=>$modules
+        ]);
+    }
+    /**
      * @Route("/admin/module/{id}/editer", name="admin.module.editer")
      * @return Response
      */
     public function edit(Module $module, Request $request,PageRepository $pageRepository) :Response
     {
         $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
-        $modules = $this->moduleRepository->findAll();
+//        $modules = $this->moduleRepository->findAll();
         $form=$this->createForm(ModuleType::class, $module);
         $form->handleRequest($request);
-
-
         if ($form ->isSubmitted() && $form->isValid())
         {
             $module->setDateModification( new \DateTime());
@@ -81,34 +141,7 @@ class AdminModulesController extends AbstractController
             'module'=>$module,
             'form'=>$form->createView(),
             'pages'=>$pages,
-            'modules'=>$modules
-        ]);
-    }
-
-    /**
-     *@Route("/admin/module/nouveau", name="admin.module.nouveau")
-     *@return Response
-     */
-    public function new(Request $request, PageRepository $pageRepository) :Response
-    {
-        $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
-        $modules = $this->moduleRepository->findAll();
-        $module = new Module();
-
-        $form=$this->createForm(ModuleType::class, $module);
-        $form->handleRequest($request);
-        if ($form ->isSubmitted() && $form->isValid())
-        {
-            $this->em->persist($module);
-            $this->em->flush();
-
-            $this->addFlash('success','L\'article a été créé');
-            return $this->redirectToRoute('admin.module.index');
-        };
-        return $this->render("admin/modules/nouveau.html.twig",[
-            'form'=> $form->createView(),
-            'pages'=>$pages,
-            'modules'=>$modules
+//            'modules'=>$modules
         ]);
     }
 

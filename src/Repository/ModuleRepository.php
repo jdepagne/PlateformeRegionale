@@ -19,6 +19,13 @@ class ModuleRepository extends ServiceEntityRepository
         parent::__construct($registry, Module::class);
     }
 
+    public function getfindAllQueryBuilder()
+    {
+        return $this
+            ->createQueryBuilder('m')
+            ->orderBy('m.id','ASC');
+
+    }
     // /**
     //  * @return Module[] Returns an array of Module objects
     //  */

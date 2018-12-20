@@ -18,13 +18,21 @@ class PageModuleType extends AbstractType
         $builder
 
             ->add('page', PageType::class, array(
-                'entry_type'=> PageType::class,
-                'allow_add'=>true
+//                'entry_type'=> PageType::class,
+//                'allow_add'=>true
             ))
             ->add('module', ModuleType::class, array(
-                'data_class'=> Module::class,
-                'allow_add'=>true
+                'required'=>false
+//                'data_class'=> Module::class,
+//                'allow_add'=>true
             ))
+//            ->add('module', EntityType::class, array(
+//                    'class'=> Module::class,
+//                    'multiple'=>true,
+//                    'choice_label'=> 'titre',
+//                    'choice_value'=>'id',
+//                    'required'=> false
+//            ))
 
         ;
     }

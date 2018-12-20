@@ -20,7 +20,7 @@ class CategorieType extends AbstractType
                 'class' =>Categorie::class,
                 'multiple' => false,
                 'choice_label'=> 'nom',
-                'empty_data'=> 'Choississez une categorie parente',
+//                'empty_data'=> 'Choississez une categorie parente',
                 'required'=>false,
                 'query_builder' => function (CategorieRepository $categorieRepository){
                     return $categorieRepository->getfindAllQueryBuilder();

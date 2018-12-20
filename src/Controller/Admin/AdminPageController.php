@@ -9,13 +9,20 @@
 namespace App\Controller\Admin;
 
 
+use App\Entity\Module;
 use App\Entity\Page;
 use App\Entity\PageModule;
-use App\Form\PageModuleType;
+
 use App\Form\PageType;
+use App\Form\ModuleType;
+
+use App\Repository\ModuleRepository;
 use App\Repository\PageRepository;
+
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,24 +65,68 @@ class AdminPageController extends AbstractController
     public function ajouter(Request $request, PageRepository $pageRepository) :Response
     {
         $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
-        $page = new Page();
+        $listePages = $pageRepository->findby([],['dateInsertionPage'=>'DESC'] );
 
-        $form= $this->createForm(PageType::class, $page);
-        dump($request);
+        //$form= $this->createForm(PageType::class, $page);
+        $form= $this->createFormBuilder()
+            ->add('page', PageType::class)
+            ->add('module_create', ModuleType::class, array(
+                'required'=>false
+            ))
+            ->add('module', EntityType::class, array(
+                        'class' =>Module::class,
+                        'multiple' => false,
+                        'choice_label'=> 'titre',
+                        'required'=>false,
+                        'query_builder' => function (ModuleRepository $moduleRepository){
+                            return $moduleRepository->getfindAllQueryBuilder();
+                        }
+            ))
+            ->getForm();
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
-            $om=$this->getDoctrine()->getManager();
-            $om->persist($page);
-            $this->em->flush();
+           $page= $form->get('page')->getData();
+           $module = $form->get('module')->getData();
+           $module_create = $form->get('module_create')->getData();
 
-            $this->addFlash('success', 'La page a été ajoutée');
-            return $this->redirectToRoute('admin.page.index');
+            $pageModule=new PageModule();
+
+
+            if($module == null  && $module_create->getTitre() == null)
+            {
+                $this->em->persist($page);
+                $this->em->flush();
+
+            } elseif ($module_create->getTitre() !== null  && $module == null){
+
+                $pageModule->setPage($page);
+                $pageModule->setModule($module_create);
+
+                $this->em->persist($pageModule);
+                $this->em->flush();
+
+            } elseif ($module_create->getTitre() == null && $module->getId() !== null){
+                $pageModule->setPage($page);
+                $pageModule->setModule($module);
+
+                $this->em->persist($pageModule);
+                $this->em->flush();
+
+            }
+            else {
+                $result='wtf';
+                dump($result);
+            }
+            //$this->addFlash('success', 'La page a été ajoutée');
+            //return $this->redirectToRoute('admin.page.index');
         };
         return $this->render('admin/pages/nouveau.html.twig',[
             'form'=> $form->createView(),
             'source'=>'page',
-            'pages'=> $pages
+            'pages'=> $pages,
+            'listePages'=>$listePages
         ]);
     }
 

@@ -18,7 +18,13 @@ class PageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Page::class);
     }
+    public function getfindAllQueryBuilder()
+    {
+        return $this
+            ->createQueryBuilder('p')
+            ->orderBy('p.id','ASC');
 
+    }
     // /**
     //  * @return Page[] Returns an array of Page objects
     //  */
