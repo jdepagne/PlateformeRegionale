@@ -18,6 +18,7 @@ class PageModule
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="pageModules",cascade={"persist"})
+     * @ORM\JoinColumn(name="page_id", nullable=true)
      */
     private $page;
 

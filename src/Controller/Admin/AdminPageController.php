@@ -124,7 +124,6 @@ class AdminPageController extends AbstractController
         };
         return $this->render('admin/pages/nouveau.html.twig',[
             'form'=> $form->createView(),
-            'source'=>'page',
             'pages'=> $pages,
             'listePages'=>$listePages
         ]);

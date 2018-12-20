@@ -12,8 +12,11 @@ namespace App\Controller\Admin;
 use App\Entity\Categorie;
 use App\Entity\Module;
 
+use App\Entity\Page;
+use App\Entity\PageModule;
 use App\Form\CategorieType;
 use App\Form\ModuleType;
+use App\Form\PageType;
 use App\Repository\CategorieRepository;
 use App\Repository\ModuleRepository;
 
@@ -68,52 +71,88 @@ class AdminModulesController extends AbstractController
      */
     public function ajouter(Request $request, PageRepository $pageRepository) :Response
     {
-        $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
+        $pages = $pageRepository->findBy(['etatPublicationPage' => 1]);
         $modules = $this->moduleRepository->findAll();
 
-        $form=$this->createFormBuilder()
+        $form = $this->createFormBuilder()
             ->add('module', ModuleType::class)
             ->add('categorie_create', CategorieType::class, array(
-            'required'=>false
+                'required' => false,
+                'label' => 'Créer une nouvelle categorie'
             ))
-            ->add('categorie',EntityType::class, array(
-                'class'=>Categorie::class,
-                'multiple'=>false,
-                'choice_label'=>'nom',
-                'required'=>false,
-                'query_builder' => function(CategorieRepository $categorieRepository){
+            ->add('categorie', EntityType::class, array(
+                'class' => Categorie::class,
+                'label' => 'Ajouter une categorie existante',
+                'multiple' => false,
+                'choice_label' => 'nom',
+                'required' => false,
+                'query_builder' => function (CategorieRepository $categorieRepository) {
                     return $categorieRepository->getfindAllQueryBuilder();
                 }
-
             ))
-            ->getForm();
-        ;
+            ->add('page_ajout', EntityType::class, array(
+                'class' => Page::class,
+                'label' => 'Ajouter à une page existante',
+                'multiple' => false,
+                'choice_label' => 'titrePage',
+                'required' => false,
+                'query_builder' => function (PageRepository $pageRepository) {
+                    return $pageRepository->getfindAllQueryBuilder();
+                }
+            ))
+            ->add('page_create', PageType::class, array(
+                'required' => false,
+                'label' => 'Créer une nouvelle page'
+            ))
+            ->getForm();;
+
         $form->handleRequest($request);
-        if ($form ->isSubmitted() && $form->isValid())
-        {
-            $module= $form->get('module')->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $module = $form->get('module')->getData();
             $categorieAjout = $form->get('categorie')->getData();
             $categorieCreate = $form->get('categorie_create')->getData();
+            $pageAjout = $form->get('page_ajout')->getData();
+            $pageCreate = $form->get('page_create')->getData();
 
-            if($categorieCreate ==null && $categorieAjout !== null)
-            {
+            //on verifie la présence de categorie pour les ajouter au module
+            if ($categorieCreate == null && $categorieAjout !== null) {
                 $module->addCategory($categorieAjout);
 
-            }else if ($categorieCreate !== null && $categorieAjout == null){
+            } else if ($categorieCreate !== null && $categorieAjout == null) {
                 $module->addCategory($categorieCreate);
+            } else {
+                $info[] = 'Attention : la categorie n\a pas pu être ajoutée';
             }
-            else{
-                dump('va falloir faire un choix');
-            }
-            dump($module);
-            $this->em->persist($module);
-            $this->em->flush();
 
-//            $this->em->persist($module);
+            //on insere le module dans un objet pageModule puis on gere l'ajoute de page
+            $pageModule = new PageModule();
+            $pageModule->setModule($module);
+
+            if ($pageAjout !== null && $pageCreate == null) {
+                $pageModule->setPage($pageAjout);
+            } elseif ($pageAjout == null && $pageCreate !== null) {
+                $pageModule->setPage($pageCreate);
+            } else {
+                $info[] = 'Attention: la page n`\'a pas pu être ajoutée';
+            }
+            dump($pageModule->getPage());
+            if($pageModule->getPage()->getTitrePage()==null){
+                $data=$module;
+            }else{
+                $data=$pageModule;
+            }
+            dump($data);
+            $this->em->persist($data);
+            $this->em->flush();
+            $this->em->persist($module);
 ////            $this->em->flush();
 ////            $this->addFlash('success','L\'article a été créé');
-////            return $this->redirectToRoute('admin.module.index');
-        };
+            dump($info);
+            //return $this->redirectToRoute('admin.module.index');
+        }
+
+
+//
         return $this->render("admin/modules/nouveau.html.twig",[
             'form'=> $form->createView(),
             'pages'=>$pages,
