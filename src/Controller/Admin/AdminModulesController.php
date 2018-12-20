@@ -114,6 +114,9 @@ class AdminModulesController extends AbstractController
             $pageAjout = $form->get('page_ajout')->getData();
             $pageCreate = $form->get('page_create')->getData();
 
+
+            dump($pageAjout);
+            dump($pageCreate);
             //on verifie la présence de categorie pour les ajouter au module
             if ($categorieCreate == null && $categorieAjout !== null) {
                 $module->addCategory($categorieAjout);
@@ -121,22 +124,22 @@ class AdminModulesController extends AbstractController
             } else if ($categorieCreate !== null && $categorieAjout == null) {
                 $module->addCategory($categorieCreate);
             } else {
-                $info[] = 'Attention : la categorie n\a pas pu être ajoutée';
+                $info[] = 'Attention: Aucune catégorie n\a été ajoutée';
             }
 
             //on insere le module dans un objet pageModule puis on gere l'ajoute de page
             $pageModule = new PageModule();
             $pageModule->setModule($module);
-
-            if ($pageAjout !== null && $pageCreate == null) {
+            dump($pageCreate->getTitrePage());
+            if ($pageAjout !== null && $pageCreate->getTitrePage() == null) {
                 $pageModule->setPage($pageAjout);
-            } elseif ($pageAjout == null && $pageCreate !== null) {
+            } elseif ($pageAjout == null && $pageCreate->getTitrePage() !== null) {
                 $pageModule->setPage($pageCreate);
             } else {
-                $info[] = 'Attention: la page n`\'a pas pu être ajoutée';
+                $info[] = 'Attention: Aucune page n`\'a été ajoutée';
             }
             dump($pageModule->getPage());
-            if($pageModule->getPage()->getTitrePage()==null){
+            if($pageModule->getPage()==null){
                 $data=$module;
             }else{
                 $data=$pageModule;
@@ -147,7 +150,9 @@ class AdminModulesController extends AbstractController
             $this->em->persist($module);
 ////            $this->em->flush();
 ////            $this->addFlash('success','L\'article a été créé');
-            dump($info);
+            if (isset ($info) ){
+                dump($info);
+            }
             //return $this->redirectToRoute('admin.module.index');
         }
 
