@@ -15,7 +15,7 @@ final class Version20181213083544 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE page_module CHANGE page_id page_id INT DEFAULT NULL, CHANGE module_id module_id INT DEFAULT NULL');
+
     }
 
     public function down(Schema $schema) : void
@@ -23,6 +23,6 @@ final class Version20181213083544 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE page_module CHANGE page_id page_id INT NOT NULL, CHANGE module_id module_id INT NOT NULL');
+      
     }
 }

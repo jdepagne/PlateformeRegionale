@@ -130,7 +130,7 @@ class AdminModulesController extends AbstractController
             //on insere le module dans un objet pageModule puis on gere l'ajoute de page
             $pageModule = new PageModule();
             $pageModule->setModule($module);
-            dump($pageCreate->getTitrePage());
+
             if ($pageAjout !== null && $pageCreate->getTitrePage() == null) {
                 $pageModule->setPage($pageAjout);
             } elseif ($pageAjout == null && $pageCreate->getTitrePage() !== null) {
@@ -138,22 +138,22 @@ class AdminModulesController extends AbstractController
             } else {
                 $info[] = 'Attention: Aucune page n`\'a été ajoutée';
             }
-            dump($pageModule->getPage());
+            //on définit l'objet a recuperer avant de la flusher()
             if($pageModule->getPage()==null){
                 $data=$module;
             }else{
                 $data=$pageModule;
             }
-            dump($data);
+
             $this->em->persist($data);
             $this->em->flush();
-            $this->em->persist($module);
-////            $this->em->flush();
-////            $this->addFlash('success','L\'article a été créé');
+
+            $this->addFlash('success','L\'article a été créé');
             if (isset ($info) ){
-                dump($info);
+                foreach ($info as $message )
+                $this->addFlash('notice',$message );
             }
-            //return $this->redirectToRoute('admin.module.index');
+            return $this->redirectToRoute('admin.module.index');
         }
 
 
