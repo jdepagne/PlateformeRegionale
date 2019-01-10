@@ -104,7 +104,7 @@ class AdminModulesController extends AbstractController
                 'required' => false,
                 'label' => 'Créer une nouvelle page'
             ))
-            ->getForm();;
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -155,15 +155,13 @@ class AdminModulesController extends AbstractController
             }
             return $this->redirectToRoute('admin.module.index');
         }
-
-
-//
         return $this->render("admin/modules/nouveau.html.twig",[
             'form'=> $form->createView(),
             'pages'=>$pages,
             'modules'=>$modules
         ]);
     }
+    
     /**
      * @Route("/admin/module/{id}/editer", name="admin.module.editer")
      * @return Response
@@ -171,21 +169,61 @@ class AdminModulesController extends AbstractController
     public function edit(Module $module, Request $request,PageRepository $pageRepository) :Response
     {
         $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
-//        $modules = $this->moduleRepository->findAll();
-        $form=$this->createForm(ModuleType::class, $module);
+       $modules = $this->moduleRepository->findAll();
+
+//        dump($module);
+        $listecategorie = $module->getCategories()->slice(0);
+       dump($listecategorie);
+        $form= $this->createFormBuilder()
+            ->add('module', ModuleType::class, array('data'=> $module))
+            ->add('categorie_create', CategorieType::class, array(
+                'required' => false,
+                'label' => 'Créer une nouvelle categorie'
+                 ))
+             ->add('categorie', EntityType::class, array(
+                'class' => Categorie::class,
+                'label' => 'Ajouter une categorie existante',
+                'multiple' => true,
+                'expanded'=>true,
+                'choice_label' => 'nom',
+                'preferred_choices'=>$listecategorie,
+                'placeholder'=> false,
+                'required' => false,
+                'query_builder' => function (CategorieRepository $categorieRepository) {
+                return $categorieRepository->getfindAllQueryBuilder();
+            }
+        ))
+        ->getForm();
+//        $form=$this->createForm(ModuleType::class, $module);
         $form->handleRequest($request);
         if ($form ->isSubmitted() && $form->isValid())
         {
+            $module = $form->get('module')->getData();
+            $choixcategorie = $form->get('categorie')->getData();
+            $categorieCreate = $form->get('categorie_create')->getData();
+
+            if ($categorieCreate !== null){
+                $module->addCategory($categorieCreate);
+            }
+            if ($choixcategorie !=null ){
+                foreach ($choixcategorie as $category){
+                    if (in_array($category, $listecategorie)== false){
+                        $module->addCategory($category);
+                    }
+                }
+
+            }
             $module->setDateModification( new \DateTime());
-            $this->em->flush();
-            $this->addFlash('success','L\'article a été modifié');
-            return $this->redirectToRoute('admin.module.index');
+            dump($module);
+            //$this->em->flush();
+//            $this->addFlash('success','L\'article a été modifié');
+//            return $this->redirectToRoute('admin.module.index');
         };
         return $this->render("admin/modules/edit.html.twig", [
             'module'=>$module,
             'form'=>$form->createView(),
             'pages'=>$pages,
-//            'modules'=>$modules
+           'modules'=>$modules
         ]);
     }
 

@@ -1,21 +1,60 @@
-{% extends 'admin/index.html.twig' %}
-{% block administration %}
-    <div class="container mt-4">
+{% extends 'admin/modules/indexModule.html.twig' %}
+{% block formulaire_module %}
+
     <h2> Modifier un article</h2>
 {{ form_start(form) }}
-        <div class="row">
-            <div class="col-md-9">{{ form_row(form.titre) }}</div>
-            <div class="col-md-3">{{ form_row(form.etatPublication) }}</div>
-            <div class="col-md-9">  {{ form_row(form.categories) }}</div>
-            <a class="btn btn-success col-md-4" style="margin:15px;" href="{{ path('admin.categorie.nouveau') }}">Créer une categorie</a>
-
+        <div class="row col-12">
+            <div class="row col-8">
+                <div class="col-md-9">{{ form_row(form.module.titre) }}</div>
+                <div class="col-md-3">{{ form_row(form.module.etatPublication) }}</div>
+                <div class="col-md-12">  {{ form_row(form.module.contenu) }}</div>
+            </div>
+            <div class="row col-4 flex-column">
+                <div id="category">
+                    <btn id="add_category" class="btn btn-success " style="margin:15px;" >Modifier la categorie</btn>
+                    <btn id="create_category" class="btn btn-primary " style="margin:15px;" >Créer une categorie</btn>
+                    <div id="formulaire_categorie_create" class="col-10"  >
+                        {{ form_row(form.categorie_create) }}
+                    </div>
+                    <div id="formulaire_categorie_exist" class="col-10">
+                        {{ form_row(form.categorie) }}
+                    </div>
+                </div>
+            </div>
+            {#<a class="btn btn-success col-md-4" style="margin:15px;" href="{{ path('admin.categorie.nouveau') }}">Créer une categorie</a>#}
         </div>
+        {#</div>#}
 
-<br>
 
         {{ form_rest(form) }}
         <button class="btn btn-primary">Sauvegarder</button>
         <a class="btn  btn-danger" href="{{ path('admin.module.index') }}">quitter</a>
 {{ form_end(form) }}
-    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $("#formulaire_categorie_exist").hide();
+            $("#formulaire_categorie_create").hide();
+
+            //On ajoute un nouveau le formulaire au clic sue le bouton d'ajout.
+            $("#add_category").click(function () {
+                $('div#formulaire_categorie_exist').toggle();
+                $('div#formulaire_categorie_create').hide();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+            $("#create_category").click(function () {
+                $('div#formulaire_categorie_create').toggle();
+                $('div#formulaire_categorie_exist').hide();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+
+        })
+
+    </script>
+
 {% endblock %}

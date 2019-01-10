@@ -25,7 +25,8 @@ class Categorie
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Module", mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity="Module", inversedBy="categories")
+     * @ORM\JoinTable(name="module_categorie")
      */
     private $modules;
 
