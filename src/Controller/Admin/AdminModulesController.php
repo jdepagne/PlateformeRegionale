@@ -24,6 +24,7 @@ use App\Repository\PageRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -80,25 +81,15 @@ class AdminModulesController extends AbstractController
                 'required' => false,
                 'label' => 'Créer une nouvelle categorie'
             ))
-            ->add('categorie', EntityType::class, array(
-                'class' => Categorie::class,
-                'label' => 'Ajouter une categorie existante',
-                'multiple' => false,
-                'choice_label' => 'nom',
-                'required' => false,
-                'query_builder' => function (CategorieRepository $categorieRepository) {
-                    return $categorieRepository->getfindAllQueryBuilder();
-                }
-            ))
             ->add('page_ajout', EntityType::class, array(
                 'class' => Page::class,
                 'label' => 'Ajouter à une page existante',
                 'multiple' => false,
                 'choice_label' => 'titrePage',
                 'required' => false,
-                'query_builder' => function (PageRepository $pageRepository) {
-                    return $pageRepository->getfindAllQueryBuilder();
-                }
+//                'query_builder' => function (PageRepository $pageRepository) {
+//                    return $pageRepository->getfindAllQueryBuilder();
+//                }
             ))
             ->add('page_create', PageType::class, array(
                 'required' => false,
@@ -109,22 +100,13 @@ class AdminModulesController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $module = $form->get('module')->getData();
-            $categorieAjout = $form->get('categorie')->getData();
+
             $categorieCreate = $form->get('categorie_create')->getData();
             $pageAjout = $form->get('page_ajout')->getData();
             $pageCreate = $form->get('page_create')->getData();
 
-
-            dump($pageAjout);
-            dump($pageCreate);
-            //on verifie la présence de categorie pour les ajouter au module
-            if ($categorieCreate == null && $categorieAjout !== null) {
-                $module->addCategory($categorieAjout);
-
-            } else if ($categorieCreate !== null && $categorieAjout == null) {
+             if ($categorieCreate !== null ) {
                 $module->addCategory($categorieCreate);
-            } else {
-                $info[] = 'Attention: Aucune catégorie n\a été ajoutée';
             }
 
             //on insere le module dans un objet pageModule puis on gere l'ajoute de page
@@ -161,63 +143,42 @@ class AdminModulesController extends AbstractController
             'modules'=>$modules
         ]);
     }
-    
+
     /**
      * @Route("/admin/module/{id}/editer", name="admin.module.editer")
      * @return Response
      */
     public function edit(Module $module, Request $request,PageRepository $pageRepository) :Response
     {
-        $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
+       $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
        $modules = $this->moduleRepository->findAll();
 
-//        dump($module);
-        $listecategorie = $module->getCategories()->slice(0);
-       dump($listecategorie);
         $form= $this->createFormBuilder()
-            ->add('module', ModuleType::class, array('data'=> $module))
+            ->add('module', ModuleType::class, array(
+                'data'=> $module
+            ))
             ->add('categorie_create', CategorieType::class, array(
                 'required' => false,
                 'label' => 'Créer une nouvelle categorie'
                  ))
-             ->add('categorie', EntityType::class, array(
-                'class' => Categorie::class,
-                'label' => 'Ajouter une categorie existante',
-                'multiple' => true,
-                'expanded'=>true,
-                'choice_label' => 'nom',
-                'preferred_choices'=>$listecategorie,
-                'placeholder'=> false,
-                'required' => false,
-                'query_builder' => function (CategorieRepository $categorieRepository) {
-                return $categorieRepository->getfindAllQueryBuilder();
-            }
-        ))
+//            ->add ('page_create', PageType::class, array(
+//                'required'=> false,
+//                'label'=> 'Créer une nouvelle page'
+//            ))
         ->getForm();
-//        $form=$this->createForm(ModuleType::class, $module);
         $form->handleRequest($request);
         if ($form ->isSubmitted() && $form->isValid())
         {
-            $module = $form->get('module')->getData();
-            $choixcategorie = $form->get('categorie')->getData();
             $categorieCreate = $form->get('categorie_create')->getData();
 
-            if ($categorieCreate !== null){
-                $module->addCategory($categorieCreate);
-            }
-            if ($choixcategorie !=null ){
-                foreach ($choixcategorie as $category){
-                    if (in_array($category, $listecategorie)== false){
-                        $module->addCategory($category);
-                    }
-                }
-
-            }
+           if ($categorieCreate !== null){
+               $module->addCategory($categorieCreate);
+           }
             $module->setDateModification( new \DateTime());
-            dump($module);
-            //$this->em->flush();
-//            $this->addFlash('success','L\'article a été modifié');
-//            return $this->redirectToRoute('admin.module.index');
+
+           $this->em->flush();
+           $this->addFlash('success','L\'article a été modifié');
+            return $this->redirectToRoute('admin.module.index');
         };
         return $this->render("admin/modules/edit.html.twig", [
             'module'=>$module,

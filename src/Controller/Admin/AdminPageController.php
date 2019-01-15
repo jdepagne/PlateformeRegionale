@@ -13,6 +13,7 @@ use App\Entity\Module;
 use App\Entity\Page;
 use App\Entity\PageModule;
 
+use App\Form\CategorieType;
 use App\Form\PageType;
 use App\Form\ModuleType;
 
@@ -67,9 +68,13 @@ class AdminPageController extends AbstractController
         $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
         $listePages = $pageRepository->findby([],['dateInsertionPage'=>'DESC'] );
 
-        //$form= $this->createForm(PageType::class, $page);
+
         $form= $this->createFormBuilder()
             ->add('page', PageType::class)
+            ->add('categorie_create', CategorieType::class, array(
+                'required'=>false,
+                'label'=> "Créer une nouvelle categorie"
+            ))
             ->add('module_create', ModuleType::class, array(
                 'required'=>false
             ))
@@ -90,7 +95,7 @@ class AdminPageController extends AbstractController
            $page= $form->get('page')->getData();
            $module = $form->get('module')->getData();
            $module_create = $form->get('module_create')->getData();
-
+           $categorie_create = $form->get('categorie_create')->getData();
             $pageModule=new PageModule();
 
 
@@ -113,14 +118,9 @@ class AdminPageController extends AbstractController
 
                 $this->em->persist($pageModule);
                 $this->em->flush();
-
             }
-            else {
-                $result='wtf';
-                dump($result);
-            }
-            //$this->addFlash('success', 'La page a été ajoutée');
-            //return $this->redirectToRoute('admin.page.index');
+            $this->addFlash('success', 'La page a été ajoutée');
+            return $this->redirectToRoute('admin.page.index');
         };
         return $this->render('admin/pages/nouveau.html.twig',[
             'form'=> $form->createView(),

@@ -38,6 +38,7 @@ class PageType extends AbstractType
                 'class'=>Page::class,
                 'multiple'=>false,
                 'choice_label'=>'titrePage',
+                'label'=> 'Ajouter une page parente',
                 'required'=>false,
                 'query_builder'=>function(PageRepository $pageRepository){
                     return $pageRepository->getfindAllQueryBuilder();

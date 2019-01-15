@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Module;
 use App\Entity\Categorie;
-
+use App\Entity\PageModule;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -28,13 +28,15 @@ class ModuleType extends AbstractType
                 'expanded'=>true,
                 'label'=>'Activer la publication'
             ])
-//            ->add('categories', EntityType::class,array(
-//                'class'=> Categorie::class,
-//                'multiple'=>true,
-//                'choice_label'=> 'nom',
-//                'choice_value'=>'id',
-//                'required'=> false
-//            ))
+            ->add('categories', EntityType::class,array(
+                'class'=> Categorie::class,
+                'multiple'=>true,
+                'expanded'=>true,
+                'choice_label'=> 'nom',
+                'choice_value'=>'id',
+                'required'=> false
+            ))
+
             ->add('contenu', CKEditorType::class)
         ;
     }

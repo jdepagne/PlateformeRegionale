@@ -26,13 +26,7 @@ class PageModuleType extends AbstractType
 //                'data_class'=> Module::class,
 //                'allow_add'=>true
             ))
-//            ->add('module', EntityType::class, array(
-//                    'class'=> Module::class,
-//                    'multiple'=>true,
-//                    'choice_label'=> 'titre',
-//                    'choice_value'=>'id',
-//                    'required'=> false
-//            ))
+//
 
         ;
     }

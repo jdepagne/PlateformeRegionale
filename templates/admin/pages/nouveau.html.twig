@@ -5,26 +5,36 @@
     <h2> Ajouter une page</h2>
     {{ form_start(form) }}
     <div class=" row col-12">
-        <div class="row col-6">
-            <div class="col-md-9">{{ form_row(form.page.titrePage) }}</div>
-            <div class="col-md-3">{{ form_row(form.page.etatPublicationPage) }}</div>
-            <div class="col-md-10">{{ form_row(form.page.descriptionPage) }}</div>
-            <div class="col-md-10">{{ form_row(form.page.categories) }}</div>
-            <div class="col-md-10">{{ form_row(form.page.parent) }}</div>
+        {#<div class="row col-6">#}
+            <div class="col-6">{{ form_row(form.page.titrePage) }}</div>
+            <div class="col-3">{{ form_row(form.page.etatPublicationPage) }}</div>
+            <div class="col-6">{{ form_row(form.page.descriptionPage) }}</div>
 
-            {#<div class="col-md-9">  {{ form_row(form.categories) }}</div>#}
-
+        <div class="col-10" id="btn ligne 1">
+            <btn id="add_category" class="btn btn-success col-2" style="margin:15px;" >Ajouter une categorie</btn>
+            <btn id="create_category" class="btn btn-primary col-2" style="margin:15px;" >Créer une categorie</btn>
+            <btn id="add_page" class="btn btn-primary col-2" style="margin:15px;" >Ajouter une page parente</btn>
         </div>
-        <div class="row col-6"  >
-            <btn id="add_module" class="btn btn-success col-3" style="height: 35px"  >Créer une categorie</btn>
-
-            <div id="formulaire_module_ajout" class="col-10 "  >
-                {{ form_row(form.module_create) }}
+            <div id="formulaire_categorie_create" class="col-10"  >
+                {{ form_row(form.categorie_create) }}
             </div>
-            <div id="formulaire_module_exist" class="col-10">
+
+            <div id="formulaire_categorie_exist" class="col-10">
+                {{ form_row(form.page.categories) }}
+            </div>
+            <div id="formulaire_page_parent" class="col-10">
+                {{ form_row(form.page.parent) }}
+            </div>
+            <div class="col-10" id="btn ligne 2">
+            <btn id="add_module" class="btn btn-success col-2 " style="margin:15px;" >Ajouter un module</btn>
+            <btn id="create_module" class="btn btn-primary col-2" style="margin:15px;" >Créer un module</btn>
+            </div>
+            <div id="formulaire_module_add" class="col-10"  >
                 {{ form_row(form.module) }}
             </div>
-        </div>
+            <div id="formulaire_module_create" class="col-10">
+               {{ form_row(form.module_create) }}
+            </div>
     </div>
         <button id="submit" class="btn btn-primary" >Enregistrer</button>
 
@@ -34,26 +44,49 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-       $("#formulaire_module_ajout").hide();
+            $("#formulaire_categorie_create").hide();
+            $("#formulaire_categorie_exist").hide();
+            $("#formulaire_page_parent").hide();
+            $("#formulaire_module_create").hide();
+            $("#formulaire_module_add").hide();
 
             //On ajoute un nouveau le formulaire au clic sue le bouton d'ajout.
+            $("#add_category").click(function () {
+                $('div#formulaire_categorie_exist').toggle();
+                $('div#formulaire_categorie_create').hide();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+            $("#create_category").click(function () {
+                $('div#formulaire_categorie_create').toggle();
+                $('div#formulaire_categorie_exist').hide();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+            $("#add_page").click(function () {
+                $('div#formulaire_page_parent').toggle();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
             $("#add_module").click(function () {
-              $('div#formulaire_module_ajout').toggle();
-              $('div#formulaire_module_exist').toggle();
+                $('div#formulaire_module_add').toggle();
+                $('div#formulaire_module_create').hide();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+            $("#create_module").click(function () {
+                $('div#formulaire_module_create').toggle();
+                $('div#formulaire_module_add').hide();
 
                 e.preventDefault();// évite qu'un # apparaisse dans l'URL
                 return false;
             });
         })
-
-
-
-
     </script>
-
-
-
-
 
 {% endblock %}
 

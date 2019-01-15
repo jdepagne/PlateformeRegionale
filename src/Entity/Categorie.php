@@ -25,7 +25,7 @@ class Categorie
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Module", inversedBy="categories")
+     * @ORM\ManyToMany(targetEntity="Module", mappedBy="categories")
      * @ORM\JoinTable(name="module_categorie")
      */
     private $modules;
@@ -92,12 +92,12 @@ class Categorie
     /**
      * @return Collection|Module[]
      */
-    public function getmodules(): Collection
+    public function getModules(): Collection
     {
         return $this->modules;
     }
 
-    public function addmodule(Module $module): self
+    public function addModule(Module $module): self
     {
         if (!$this->modules->contains($module)) {
             $this->modules[] = $module;
@@ -106,7 +106,7 @@ class Categorie
         return $this;
     }
 
-    public function removemodule(Module $module): self
+    public function removeModule(Module $module): self
     {
         if ($this->modules->contains($module)) {
             $this->modules->removeElement($module);
