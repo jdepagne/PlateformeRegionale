@@ -20,6 +20,7 @@ use App\Form\PageType;
 use App\Repository\CategorieRepository;
 use App\Repository\ModuleRepository;
 
+use App\Repository\PageModuleRepository;
 use App\Repository\PageRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -148,11 +149,18 @@ class AdminModulesController extends AbstractController
      * @Route("/admin/module/{id}/editer", name="admin.module.editer")
      * @return Response
      */
-    public function edit(Module $module, Request $request,PageRepository $pageRepository) :Response
+    public function edit(Module $module, Request $request,PageRepository $pageRepository, PageModuleRepository $pageModuleRepository) :Response
     {
        $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
        $modules = $this->moduleRepository->findAll();
-
+       $listePagemoduletest=$module->getPageModules();
+       dump($listePagemoduletest);
+       $listePageModule = $pageModuleRepository->findBy(['module'=>$module]);
+        dump($listePageModule);
+        foreach ($listePageModule as $pageliee){
+            $listePage[]=$pageliee->getPage();
+        }
+        dump($pageliee);
         $form= $this->createFormBuilder()
             ->add('module', ModuleType::class, array(
                 'data'=> $module
@@ -161,14 +169,24 @@ class AdminModulesController extends AbstractController
                 'required' => false,
                 'label' => 'Créer une nouvelle categorie'
                  ))
-//            ->add ('page_create', PageType::class, array(
-//                'required'=> false,
-//                'label'=> 'Créer une nouvelle page'
-//            ))
+            ->add('page_ajout', EntityType::class, array(
+                'class' => Page::class,
+                'label' => 'Ajouter à une page existante',
+                'multiple' => true,
+                'expanded'=> true,
+                'choice_label' => 'titrePage',
+                'required' => false,
+                'data'=> $listePage
+            ))
+            ->add ('page_create', PageType::class, array(
+                'required'=> false,
+                'label'=> 'Créer une nouvelle page'
+            ))
         ->getForm();
         $form->handleRequest($request);
         if ($form ->isSubmitted() && $form->isValid())
         {
+            dump($form->getData());
             $categorieCreate = $form->get('categorie_create')->getData();
 
            if ($categorieCreate !== null){
@@ -176,9 +194,28 @@ class AdminModulesController extends AbstractController
            }
             $module->setDateModification( new \DateTime());
 
-           $this->em->flush();
-           $this->addFlash('success','L\'article a été modifié');
-            return $this->redirectToRoute('admin.module.index');
+           $newListePage = $form->get('page_ajout')->getData();
+           $pageCreate= $form->get('page_create')->getData();
+//           if($newListePage !==$listePage && $pageCreate !==null){
+//               $pageModule = new PageModule();
+//               $pageModule->setModule($module);
+//
+//               foreach ($newListePage as $newPageliee){
+//                   if (in_array($newPageliee, $listePage)==false){
+//                       $pageModule->setPage($newPageliee);
+//                   }
+//               }
+//               foreach ($listePage as $oldPageliee){
+//                   if(in_array($oldPageliee, $newListePage)==false){
+//                       $oldPageModule=$pageModuleRepository->findOneBy(['module'=>$module]['page'])
+//                   }
+//               }
+//
+//           }
+//
+//           $this->em->flush();
+//           $this->addFlash('success','L\'article a été modifié');
+//            return $this->redirectToRoute('admin.module.index');
         };
         return $this->render("admin/modules/edit.html.twig", [
             'module'=>$module,

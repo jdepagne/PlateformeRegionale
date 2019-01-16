@@ -20,6 +20,17 @@
                         {{ form_row(form.module.categories) }}
                     </div>
                 </div>
+                <div id="page">
+                    <btn id="add_page" class="btn btn-success " style="margin:15px;" >Ajouter à une page</btn>
+                    <btn id="create_page" class="btn btn-primary " style="margin:15px;" >Créer une page</btn>
+                    <div id="formulaire_page_create" class="col-10"  >
+                        {{ form_row(form.page_create) }}
+                    </div>
+                    <div id="formulaire_page_exist" class="col-10">
+                        {{ form_row(form.page_ajout) }}
+                    </div>
+                </div>
+
             </div>
             {#<a class="btn btn-success col-md-4" style="margin:15px;" href="{{ path('admin.categorie.nouveau') }}">Créer une categorie</a>#}
         </div>
@@ -36,6 +47,8 @@
         $(document).ready(function() {
             $("#formulaire_categorie_exist").hide();
             $("#formulaire_categorie_create").hide();
+            $("#formulaire_page_create").hide();
+            $("#formulaire_page_create").hide();
 
             //On ajoute un nouveau le formulaire au clic sue le bouton d'ajout.
             $("#add_category").click(function () {
@@ -48,6 +61,21 @@
             $("#create_category").click(function () {
                 $('div#formulaire_categorie_create').toggle();
                 $('div#formulaire_categorie_exist').hide();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+
+            $("#add_page").click(function () {
+                $('div#formulaire_page_exist').toggle();
+                $('div#formulaire_page_create').hide();
+
+                e.preventDefault();// évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+            $("#create_page").click(function () {
+                $('div#formulaire_page_create').toggle();
+                $('div#formulaire_page_exist').hide();
 
                 e.preventDefault();// évite qu'un # apparaisse dans l'URL
                 return false;

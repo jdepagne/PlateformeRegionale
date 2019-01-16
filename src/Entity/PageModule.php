@@ -23,7 +23,7 @@ class PageModule
     private $page;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Module", inversedBy="pageModules", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Module",inversedBy="pageModules", cascade={"persist"})
      * @ORM\JoinColumn(name="module_id", nullable=true)
      */
     private $module;

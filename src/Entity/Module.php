@@ -45,7 +45,7 @@ class Module
      */
     private $categories;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PageModule", mappedBy="module", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\PageModule",mappedBy="module", orphanRemoval=true)
      */
     private $pageModules;
 
@@ -166,4 +166,6 @@ class Module
         }
         return $this;
     }
+
+
 }

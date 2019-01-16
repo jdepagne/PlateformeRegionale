@@ -30,7 +30,9 @@
                 {#</li>#}
                 {% for page in pages %}
                     <li class="navbar-nav mr-auto">
-                        <a class="nav-link"  href="{{ path('page.show',{'id':page.id}) }}" >{{ page.titrePage }}</a>
+                       <a class="nav-link"  href="{{ path('page.show',{'titre':page.titrePage}) }}" >{{ page.titrePage }}</a>
+
+
                     </li>
                 {% endfor %}
             </ul>

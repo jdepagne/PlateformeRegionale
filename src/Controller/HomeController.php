@@ -21,16 +21,5 @@ class HomeController extends AbstractController
         return $this->render('pages/home.html.twig', array('current_menu'=>'home', 'lastModules'=>$lastModules, 'pages'=>$pages));
        // return $this->render('pages/home.html.twig', array('current_menu'=>'home'));
     }
-//    /**
-//     * @Route("/page/{id}", name="page")
-//     * @return Response
-//     */
-//    public function page($id) :Response
-//    {
-//
-//
-//
-//        return $this->render('pages/categorie.html.twig',array('categorie'=>$categorie,'number'=>$i, 'current_menu'=>$categorie));
-//    }
-//
+
 }

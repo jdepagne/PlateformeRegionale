@@ -19,6 +19,13 @@ class PageModuleRepository extends ServiceEntityRepository
         parent::__construct($registry, PageModule::class);
     }
 
+    public function getfindAllQueryBuilder()
+    {
+        return $this
+            ->createQueryBuilder('p')
+            ->orderBy('p.id','ASC');
+
+    }
     // /**
     //  * @return PageModule[] Returns an array of PageModule objects
     //  */
