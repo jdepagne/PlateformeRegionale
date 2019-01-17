@@ -153,14 +153,14 @@ class AdminModulesController extends AbstractController
     {
        $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
        $modules = $this->moduleRepository->findAll();
-       $listePagemoduletest=$module->getPageModules();
-       dump($listePagemoduletest);
+
+       $listePage = array();
+
        $listePageModule = $pageModuleRepository->findBy(['module'=>$module]);
-        dump($listePageModule);
+
         foreach ($listePageModule as $pageliee){
             $listePage[]=$pageliee->getPage();
         }
-        dump($pageliee);
         $form= $this->createFormBuilder()
             ->add('module', ModuleType::class, array(
                 'data'=> $module
@@ -194,25 +194,34 @@ class AdminModulesController extends AbstractController
            }
             $module->setDateModification( new \DateTime());
 
+           // on prend compte des modifications du module  et on le flush
+            $this->em->flush();
+
            $newListePage = $form->get('page_ajout')->getData();
            $pageCreate= $form->get('page_create')->getData();
-//           if($newListePage !==$listePage && $pageCreate !==null){
-//               $pageModule = new PageModule();
-//               $pageModule->setModule($module);
-//
-//               foreach ($newListePage as $newPageliee){
-//                   if (in_array($newPageliee, $listePage)==false){
-//                       $pageModule->setPage($newPageliee);
-//                   }
-//               }
-//               foreach ($listePage as $oldPageliee){
-//                   if(in_array($oldPageliee, $newListePage)==false){
-//                       $oldPageModule=$pageModuleRepository->findOneBy(['module'=>$module]['page'])
-//                   }
-//               }
-//
-//           }
-//
+           if($newListePage !==$listePage && $pageCreate !==null){
+               $pageModule = new PageModule();
+               $pageModule->setModule($module);
+
+               foreach ($newListePage as $newPageliee){
+                   if (in_array($newPageliee, $listePage)==false){
+                       $pageModule->setPage($newPageliee);
+                       $this->em->persist($pageModule);
+                       $this->em->flush();
+                   }
+               }
+               foreach ($listePage as $oldPageliee){
+                   if(in_array($oldPageliee, $newListePage)==false){
+                       $oldPageModule=$pageModuleRepository->findOneBy(['module'=>$module,'page'=>$oldPageliee]);
+                       $this->em->remove($oldPageModule);
+                       $this->em->flush();
+                   }
+               }
+
+           }
+
+
+//           $this->em->persist();
 //           $this->em->flush();
 //           $this->addFlash('success','L\'article a été modifié');
 //            return $this->redirectToRoute('admin.module.index');
