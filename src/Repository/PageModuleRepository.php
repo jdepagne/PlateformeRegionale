@@ -26,6 +26,12 @@ class PageModuleRepository extends ServiceEntityRepository
             ->orderBy('p.id','ASC');
 
     }
+
+    public function getAllByPage($page){
+        return $this
+            ->createQueryBuilder('pm')
+            ->where('pm.page'== $page);
+    }
     // /**
     //  * @return PageModule[] Returns an array of PageModule objects
     //  */

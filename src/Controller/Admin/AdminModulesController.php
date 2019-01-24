@@ -153,9 +153,9 @@ class AdminModulesController extends AbstractController
     {
        $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
        $modules = $this->moduleRepository->findAll();
-
+        $moduleCategorie= $module->getCategories();
+        dump($moduleCategorie);
        $listePage = array();
-
        $listePageModule = $pageModuleRepository->findBy(['module'=>$module]);
 
         foreach ($listePageModule as $pageliee){
@@ -183,6 +183,7 @@ class AdminModulesController extends AbstractController
                 'label'=> 'Créer une nouvelle page'
             ))
         ->getForm();
+
         $form->handleRequest($request);
         if ($form ->isSubmitted() && $form->isValid())
         {
@@ -200,14 +201,16 @@ class AdminModulesController extends AbstractController
            $newListePage = $form->get('page_ajout')->getData();
            $pageCreate= $form->get('page_create')->getData();
            if($newListePage !==$listePage && $pageCreate !==null){
-               $pageModule = new PageModule();
-               $pageModule->setModule($module);
 
                foreach ($newListePage as $newPageliee){
                    if (in_array($newPageliee, $listePage)==false){
+                       $pageModule = new PageModule();
+                       $pageModule->setModule($module);
                        $pageModule->setPage($newPageliee);
                        $this->em->persist($pageModule);
+
                        $this->em->flush();
+                        dump($pageModule);
                    }
                }
                foreach ($listePage as $oldPageliee){
@@ -219,12 +222,10 @@ class AdminModulesController extends AbstractController
                }
 
            }
-
-
 //           $this->em->persist();
 //           $this->em->flush();
-//           $this->addFlash('success','L\'article a été modifié');
-//            return $this->redirectToRoute('admin.module.index');
+//          $this->addFlash('success','L\'article a été modifié');
+//          return $this->redirectToRoute('admin.module.index');
         };
         return $this->render("admin/modules/edit.html.twig", [
             'module'=>$module,

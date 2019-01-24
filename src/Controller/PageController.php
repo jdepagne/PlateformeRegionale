@@ -10,6 +10,7 @@ namespace App\Controller;
 
 
 use App\Repository\ModuleRepository;
+use App\Repository\PageModuleRepository;
 use App\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,15 +36,26 @@ class PageController extends AbstractController
      *
      * @return Response
      */
-    public function voir( PageRepository $pageRepository, $titre, ModuleRepository $moduleRepository) :Response
+    public function voir( PageRepository $pageRepository, $titre) :Response
     {
-        dump($titre);
-
         $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
         $page= $pageRepository->findOneBy(['titrePage'=>$titre]);
+        $liste= $page->getPageModules();
+
+        $modules=array();
+        foreach ($liste as $pm){
+            $module=$pm->getModule();
+            dump($module);
+            $modules[]=$module;
+        }
+        dump($modules);
 
 
-
-        //return $this->render('pages/categorie.html.twig',array('page'=>$page, 'current_menu'=>$page->getTitrePage() ,'pages'=>$pages));
+        return $this->render('pages/page.html.twig',array(
+            'page'=>$page,
+            'current_menu'=>$page->getTitrePage() ,
+            'pages'=>$pages,
+            'modules'=>$modules
+           ));
     }
 }

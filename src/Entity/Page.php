@@ -50,7 +50,7 @@ class Page
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PageModule", mappedBy="page", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\PageModule", mappedBy="page", orphanRemoval=true, fetch="EAGER")
      */
     private $pageModules;
     /**

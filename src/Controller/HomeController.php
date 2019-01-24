@@ -16,6 +16,7 @@ class HomeController extends AbstractController
     public function index(ModuleRepository $moduleRepository, PageRepository $pageRepository) :Response
     {
         $pages = $pageRepository->findBy(['etatPublicationPage'=>1]);
+        //$pages = $pageRepository->findAll();
        $lastModules=  $moduleRepository->findBy(['etatPublication'=>1], ['dateInsertion'=>'DESC']);
        //$lastArticles=  $articleRepository->findAll();
         return $this->render('pages/home.html.twig', array('current_menu'=>'home', 'lastModules'=>$lastModules, 'pages'=>$pages));

@@ -45,7 +45,8 @@ class Module
      */
     private $categories;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PageModule",mappedBy="module", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\PageModule",mappedBy="module", orphanRemoval=true, fetch="EAGER")
+     *
      */
     private $pageModules;
 
